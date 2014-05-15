@@ -120,23 +120,23 @@ static NSString * const DETweetLastAccountIdentifier = @"DETweetLastAccountIdent
 
 + (BOOL)canAccessTwitterAccounts
 {
-    if ([UIDevice de_isIOS5]) {
-        ACAccountStore *accountStore = [[[ACAccountStore alloc] init] autorelease];
-        ACAccountType *twitterAccountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
-        
-        __block BOOL accessGranted = NO;
-        [accountStore requestAccessToAccountsWithType:twitterAccountType
-                                withCompletionHandler:^(BOOL granted, NSError *error) {
-                                    accessGranted = granted;
-                                    waitingForAccess = NO;
-                                }];
-        waitingForAccess = YES;
-        while (waitingForAccess) {
-            sleep(1);
-        }
-        
-        return accessGranted;
-    }
+//    if ([UIDevice de_isIOS5]) {
+//        ACAccountStore *accountStore = [[[ACAccountStore alloc] init] autorelease];
+//        ACAccountType *twitterAccountType = [accountStore accountTypeWithAccountTypeIdentifier:ACAccountTypeIdentifierTwitter];
+//        
+//        __block BOOL accessGranted = NO;
+//        [accountStore requestAccessToAccountsWithType:twitterAccountType
+//                                withCompletionHandler:^(BOOL granted, NSError *error) {
+//                                    accessGranted = granted;
+//                                    waitingForAccess = NO;
+//                                }];
+//        waitingForAccess = YES;
+//        while (waitingForAccess) {
+//            sleep(1);
+//        }
+//        
+//        return accessGranted;
+//    }
     
     return YES;
 }
@@ -162,10 +162,6 @@ static NSString * const DETweetLastAccountIdentifier = @"DETweetLastAccountIdent
     return canSendTweet;
 }
 
-+ (void)logout
-{
-    [OAuth clearCrendentials];
-}
 
 + (void)displayNoTwitterAccountsAlert
     // We have an instance method that's identical to this. Make sure it stays identical.
@@ -390,7 +386,7 @@ static NSString * const DETweetLastAccountIdentifier = @"DETweetLastAccountIdent
     
     [self updateFramesForOrientation:self.interfaceOrientation];
     
-    [self checkTwitterCredentials];
+//    [self checkTwitterCredentials];
     
     [self selectTwitterAccount];  // Set or verify our default account.
     
@@ -1048,19 +1044,24 @@ static NSString * const DETweetLastAccountIdentifier = @"DETweetLastAccountIdent
 {
     self.sendButton.enabled = NO;
     
-    NSString *tweet = self.textView.text;
-    
-    for (NSURL *url in self.urls) {
-        NSString *urlString = [url absoluteString];
-        if ([tweet length] > 0) {
-            tweet = [tweet stringByAppendingString:@" "];
-        }
-        tweet = [tweet stringByAppendingString:urlString];
+    if (self.completionHandler) {
+        self.completionHandler(DETweetComposeViewControllerResultDone);
     }
     
-    DETweetPoster *tweetPoster = [[[DETweetPoster alloc] init] autorelease];
-    tweetPoster.delegate = self;
-    [tweetPoster postTweet:tweet withImages:self.images fromAccount:self.twitterAccount];
+//    NSString *tweet = self.textView.text;
+//
+//    for (NSURL *url in self.urls) {
+//        NSString *urlString = [url absoluteString];
+//        if ([tweet length] > 0) {
+//            tweet = [tweet stringByAppendingString:@" "];
+//        }
+//        tweet = [tweet stringByAppendingString:urlString];
+//    }
+//    
+//
+//    DETweetPoster *tweetPoster = [[[DETweetPoster alloc] init] autorelease];
+//    tweetPoster.delegate = self;
+//    [tweetPoster postTweet:tweet withImages:self.images fromAccount:self.twitterAccount];
 }
 
 
